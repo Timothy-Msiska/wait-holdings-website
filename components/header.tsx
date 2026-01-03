@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import Image from "next/image"
 import clsx from "clsx"
 import { Menu, X } from "lucide-react"
@@ -18,27 +18,12 @@ const navigation = [
 
 export function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
   const [active, setActive] = useState("#home")
   const [hovered, setHovered] = useState<string | null>(null)
-  const [showHeader, setShowHeader] = useState(true)
 
-  const lastScrollY = useRef(0)
-  const headerHeight = 96
+  const headerHeight = 80 // Compact height
 
-  // ---------------- Scroll behavior ----------------
-  useEffect(() => {
-    const onScroll = () => {
-      const currentY = window.scrollY
-      setScrolled(currentY > 40)
-      setShowHeader(currentY <= lastScrollY.current || currentY < 120)
-      lastScrollY.current = currentY
-    }
-    window.addEventListener("scroll", onScroll)
-    return () => window.removeEventListener("scroll", onScroll)
-  }, [])
-
-  // ---------------- Active section detection ----------------
+  // ---------------- Section Observer ----------------
   useEffect(() => {
     const sections = [
       "home",
@@ -60,7 +45,7 @@ export function Header() {
     return () => observer.disconnect()
   }, [])
 
-  // ---------------- Scroll to section ----------------
+  // ---------------- Scroll to Section ----------------
   const handleScrollTo = (href: string) => {
     const id = href.replace("#", "")
     const element = document.getElementById(id)
@@ -72,42 +57,36 @@ export function Header() {
 
   return (
     <motion.header
-      initial={false}
-      animate={{
-        y: showHeader ? 0 : -110,
-        paddingTop: scrolled ? 6 : 12,
-      }}
-      transition={{ duration: 0.25, ease: "easeOut" }}
-      className="fixed top-0 z-[999] w-full backdrop-blur-md bg-white/70 shadow-md"
+      initial={{ opacity: 0, y: -40 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
+      className="fixed top-6 left-1/2 -translate-x-1/2 z-[999] w-full max-w-6xl"
     >
-      <div className="mx-auto max-w-7xl px-4">
-        <motion.div
-          layout
-          className={clsx("grid grid-cols-3 items-center h-[72px] transition-all rounded-2xl")}
-        >
-          {/* LOGO */}
-          <motion.a
+      <motion.div
+        layout
+        className="relative rounded-3xl bg-white/90 backdrop-blur-md border border-transparent shadow-md transition-all"
+      >
+        <nav className="flex items-center justify-between h-[72px] px-6 md:px-12">
+          {/* LOGO → Far Left */}
+          <a
             href="#home"
-            className="flex items-center"
+            className="flex items-center flex-shrink-0"
             onClick={(e) => {
               e.preventDefault()
               document.getElementById("home")?.scrollIntoView({ behavior: "smooth" })
             }}
-            animate={{ scale: scrolled ? 0.95 : 1 }}
-            transition={{ duration: 0.25 }}
           >
             <Image
               src="/images/logo.png"
               alt="WAIT HOLDINGS"
-              width={96}
-              height={48}
-              priority
-              className="h-10 w-auto object-contain"
+              width={130}
+              height={60}
+              className="h-12 w-auto object-contain"
             />
-          </motion.a>
+          </a>
 
-          {/* DESKTOP NAV */}
-          <div className="hidden md:flex justify-center gap-10 relative">
+          {/* DESKTOP NAV → Center */}
+          <div className="hidden md:flex flex-1 justify-center gap-10">
             {navigation.map((item) => {
               const isActive = active === item.href
               const isHover = hovered === item.href
@@ -118,17 +97,15 @@ export function Header() {
                   onMouseEnter={() => setHovered(item.href)}
                   onMouseLeave={() => setHovered(null)}
                   className={clsx(
-                    "relative text-sm font-medium transition-colors",
-                    isActive || isHover
-                      ? "text-green-600"
-                      : "text-gray-700 hover:text-green-600"
+                    "relative text-base font-medium transition-colors px-2 py-1 hover:text-green-700",
+                    isActive ? "text-green-700" : "text-gray-700"
                   )}
                 >
                   {item.name}
                   {(isActive || isHover) && (
                     <motion.span
                       layoutId="nav-indicator"
-                      className="absolute -bottom-1 left-0 h-[2px] w-full rounded-full bg-green-600"
+                      className="absolute -bottom-1 left-0 h-[2px] w-full rounded-full bg-green-700"
                       transition={{ type: "spring", stiffness: 380, damping: 30 }}
                     />
                   )}
@@ -137,32 +114,35 @@ export function Header() {
             })}
           </div>
 
-          {/* CTA + MOBILE MENU BUTTON */}
-          <div className="flex items-center justify-end gap-2">
-            <Button className="hidden md:inline-flex rounded-full px-6 py-2 bg-gradient-to-r from-green-600 to-green-500 shadow-md hover:shadow-lg transition-all duration-300">
+          {/* CTA + MOBILE MENU → Far Right */}
+          <div className="flex items-center gap-3">
+            <Button className="hidden md:inline-flex rounded-full px-8 py-2 bg-gradient-to-r from-green-600 to-green-500 shadow-sm hover:shadow-md transition-all duration-300 text-white text-base">
               Book Consultation
             </Button>
 
-            <button
-              onClick={() => setMenuOpen((v) => !v)}
-              className="md:hidden rounded-xl border border-gray-300 p-2 z-[1000]"
-            >
-              {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-            </button>
+            {/* MOBILE MENU BUTTON */}
+            <div className="md:hidden">
+              <button
+                onClick={() => setMenuOpen((v) => !v)}
+                className="rounded-lg border border-gray-300 p-3"
+              >
+                {menuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              </button>
+            </div>
           </div>
-        </motion.div>
+        </nav>
 
         {/* MOBILE MENU */}
         <AnimatePresence>
           {menuOpen && (
             <motion.div
-              initial={{ opacity: 0, y: -20 }}
+              initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.25, ease: "easeOut" }}
-              className="md:hidden bg-white/95 backdrop-blur-md rounded-b-2xl shadow-lg mt-2 overflow-hidden z-[998]"
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ type: "spring", stiffness: 280, damping: 25 }}
+              className="md:hidden overflow-hidden bg-white/90 backdrop-blur-md rounded-b-3xl shadow-md px-6 py-6"
             >
-              <div className="flex flex-col gap-4 px-6 py-4">
+              <div className="flex flex-col gap-5">
                 {navigation.map((item) => {
                   const isActive = active === item.href
                   return (
@@ -170,24 +150,22 @@ export function Header() {
                       key={item.name}
                       onClick={() => handleScrollTo(item.href)}
                       className={clsx(
-                        "text-sm font-medium text-left w-full transition-colors",
-                        isActive
-                          ? "text-green-600 underline underline-offset-4"
-                          : "text-gray-700 hover:text-green-600"
+                        "text-base font-medium text-left w-full transition-colors py-2 hover:text-green-700",
+                        isActive ? "text-green-700 underline underline-offset-3" : "text-gray-700"
                       )}
                     >
                       {item.name}
                     </button>
                   )
                 })}
-                <Button className="w-full rounded-full mt-2 bg-green-600 hover:bg-green-500 text-white">
+                <Button className="w-full rounded-full mt-2 bg-green-600 hover:bg-green-500 text-white py-3 text-base">
                   Book Consultation
                 </Button>
               </div>
             </motion.div>
           )}
         </AnimatePresence>
-      </div>
+      </motion.div>
     </motion.header>
   )
 }
