@@ -1,141 +1,205 @@
 "use client"
 
-import Header from "@/components/header"
+import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
+import clsx from "clsx"
+import { Menu, X } from "lucide-react"
+import { motion, AnimatePresence } from "framer-motion"
+import { Button } from "@/components/ui/button"
 
-export default function HomePage() {
+const navigation = [
+  { name: "MlimiFert", href: "#mlimifert" },
+  { name: "About", href: "#about" },
+  { name: "Services", href: "#services" },
+  { name: "Technology", href: "#technology" },
+  { name: "Impact", href: "#impact" },
+  { name: "Contact", href: "#contact" },
+]
+
+export function Header() {
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+  const [active, setActive] = useState("#home")
+  const [hovered, setHovered] = useState<string | null>(null)
+  const [showHeader, setShowHeader] = useState(true)
+
+  const lastScrollY = useRef(0)
+  const headerHeight = 96
+
+  // ---------------- Scroll behavior ----------------
+  useEffect(() => {
+    const onScroll = () => {
+      const currentY = window.scrollY
+      setScrolled(currentY > 40)
+      setShowHeader(currentY <= lastScrollY.current || currentY < 120)
+      lastScrollY.current = currentY
+    }
+    window.addEventListener("scroll", onScroll)
+    return () => window.removeEventListener("scroll", onScroll)
+  }, [])
+
+  // ---------------- Active section detection ----------------
+  useEffect(() => {
+    const sections = [
+      "home",
+      ...navigation.map((item) => item.href.replace("#", "")),
+    ]
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => el !== null)
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActive(`#${entry.target.id}`)
+          }
+        })
+      },
+      { rootMargin: "-50% 0px -50% 0px" }
+    )
+
+    sections.forEach((section) => observer.observe(section))
+    return () => observer.disconnect()
+  }, [])
+
+  // ---------------- Scroll to section ----------------
+  const handleScrollTo = (href: string) => {
+    const id = href.replace("#", "")
+    const element = document.getElementById(id)
+    if (!element) return
+    const top = element.getBoundingClientRect().top + window.scrollY
+    window.scrollTo({ top: top - headerHeight, behavior: "smooth" })
+    setMenuOpen(false)
+  }
+
   return (
-    <div className="relative">
-      {/* HEADER */}
-      <Header />
+    <motion.header
+      initial={false}
+      animate={{
+        y: showHeader ? 0 : -110,
+        paddingTop: scrolled ? 8 : 16,
+      }}
+      transition={{ duration: 0.25, ease: "easeOut" }}
+      className="fixed top-0 z-[999] w-full"
+    >
+      <div className="mx-auto max-w-7xl px-4">
+        <motion.div
+          layout
+          className={clsx(
+            "rounded-2xl border backdrop-blur-xl transition-all",
+            scrolled
+              ? "border-border bg-background/85 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.25)]"
+              : "border-transparent bg-background/70"
+          )}
+        >
+          <nav className="grid h-[72px] grid-cols-3 items-center px-6">
+            {/* LOGO → Scroll to Home */}
+            <motion.a
+              href="#home"
+              className="flex items-center"
+              onClick={(e) => {
+                e.preventDefault()
+                document.getElementById("home")?.scrollIntoView({ behavior: "smooth" })
+              }}
+              animate={{ scale: scrolled ? 0.95 : 1 }}
+              transition={{ duration: 0.25 }}
+            >
+              <Image
+                src="/images/logo.png"
+                alt="WAIT HOLDINGS"
+                width={96}
+                height={48}
+                priority
+                className="h-10 w-auto object-contain"
+              />
+            </motion.a>
 
-      {/* HERO SECTION */}
-      <section
-        id="home"
-        className="h-screen flex flex-col justify-center items-center bg-gradient-to-br from-green-500 to-blue-500 text-white"
-      >
-        <h1 className="text-5xl md:text-7xl font-bold mb-4">Welcome to WAIT Holdings</h1>
-        <p className="text-lg md:text-2xl mb-8 text-center max-w-xl">
-          We provide top-tier agricultural solutions for modern farmers.
-        </p>
-        <button className="px-6 py-3 rounded-full bg-white text-green-600 font-semibold hover:bg-gray-100 transition">
-          Get Started
-        </button>
-      </section>
+            {/* DESKTOP NAV */}
+            <div className="hidden md:flex justify-center gap-10 relative">
+              {navigation.map((item) => {
+                const isActive = active === item.href
+                const isHover = hovered === item.href
+                return (
+                  <button
+                    key={item.name}
+                    onClick={() => handleScrollTo(item.href)}
+                    onMouseEnter={() => setHovered(item.href)}
+                    onMouseLeave={() => setHovered(null)}
+                    className={clsx(
+                      "relative text-sm font-medium transition-colors",
+                      isActive || isHover
+                        ? "text-foreground"
+                        : "text-muted-foreground hover:text-foreground"
+                    )}
+                  >
+                    {item.name}
+                    {(isActive || isHover) && (
+                      <motion.span
+                        layoutId="nav-indicator"
+                        className="absolute -bottom-1 left-0 h-[2px] w-full rounded-full bg-primary"
+                        transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                      />
+                    )}
+                  </button>
+                )
+              })}
+            </div>
 
-      {/* MLIMIFERT SECTION */}
-      <section
-        id="mlimifert"
-        className="min-h-screen flex flex-col justify-center items-center bg-white text-black px-6 md:px-20"
-      >
-        <h2 className="text-4xl font-bold mb-6">MlimiFert Products</h2>
-        <p className="text-lg md:text-xl mb-8 max-w-3xl text-center">
-          MlimiFert offers high-quality fertilizers and solutions to boost your farm productivity.
-          Learn about our range of products and sustainable practices that help your crops thrive.
-        </p>
-        <div className="grid md:grid-cols-3 gap-6 w-full">
-          <div className="p-6 border rounded-lg shadow hover:shadow-lg transition">
-            <Image
-              src="/images/fertilizer1.png"
-              alt="Fertilizer A"
-              width={400}
-              height={300}
-              className="w-full h-48 object-cover rounded"
-            />
-            <h3 className="text-xl font-semibold mt-4">Fertilizer A</h3>
-            <p className="mt-2 text-sm text-gray-600">
-              Perfect for maize and wheat crops.
-            </p>
-          </div>
-          <div className="p-6 border rounded-lg shadow hover:shadow-lg transition">
-            <Image
-              src="/images/fertilizer2.png"
-              alt="Fertilizer B"
-              width={400}
-              height={300}
-              className="w-full h-48 object-cover rounded"
-            />
-            <h3 className="text-xl font-semibold mt-4">Fertilizer B</h3>
-            <p className="mt-2 text-sm text-gray-600">
-              Ideal for leafy vegetables and legumes.
-            </p>
-          </div>
-          <div className="p-6 border rounded-lg shadow hover:shadow-lg transition">
-            <Image
-              src="/images/fertilizer3.png"
-              alt="Fertilizer C"
-              width={400}
-              height={300}
-              className="w-full h-48 object-cover rounded"
-            />
-            <h3 className="text-xl font-semibold mt-4">Fertilizer C</h3>
-            <p className="mt-2 text-sm text-gray-600">
-              Designed for fruit crops and plantations.
-            </p>
-          </div>
-        </div>
-      </section>
+            {/* CTA + MOBILE MENU BUTTON */}
+            <div className="flex items-center justify-end gap-2">
+              <Button className="hidden md:inline-flex rounded-full px-6
+                bg-gradient-to-r from-primary to-primary/80
+                shadow-md shadow-primary/20
+                hover:shadow-lg hover:shadow-primary/30
+                transition-all duration-300"
+              >
+                Book Consultation
+              </Button>
 
-      {/* ABOUT SECTION */}
-      <section
-        id="about"
-        className="min-h-screen flex flex-col justify-center items-center bg-gray-50 text-black px-6 md:px-20"
-      >
-        <h2 className="text-4xl font-bold mb-6">About Us</h2>
-        <p className="text-lg md:text-xl max-w-3xl text-center">
-          WAIT Holdings has been supporting farmers for over 20 years, providing sustainable
-          solutions, expert guidance, and high-quality products to maximize farm productivity.
-        </p>
-      </section>
+              <button
+                onClick={() => setMenuOpen((v) => !v)}
+                className="md:hidden ml-auto rounded-xl border border-border p-2 z-[1000]"
+              >
+                {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              </button>
+            </div>
+          </nav>
 
-      {/* SERVICES SECTION */}
-      <section
-        id="services"
-        className="min-h-screen flex flex-col justify-center items-center bg-white text-black px-6 md:px-20"
-      >
-        <h2 className="text-4xl font-bold mb-6">Our Services</h2>
-        <p className="text-lg md:text-xl max-w-3xl text-center">
-          We provide advisory, training, and agricultural products to farmers, helping them
-          optimize their yield and adopt sustainable practices.
-        </p>
-      </section>
-
-      {/* TECHNOLOGY SECTION */}
-      <section
-        id="technology"
-        className="min-h-screen flex flex-col justify-center items-center bg-gray-50 text-black px-6 md:px-20"
-      >
-        <h2 className="text-4xl font-bold mb-6">Technology</h2>
-        <p className="text-lg md:text-xl max-w-3xl text-center">
-          Using modern agricultural technology, we help farmers monitor crop health, soil
-          fertility, and maximize productivity with precision farming tools.
-        </p>
-      </section>
-
-      {/* IMPACT SECTION */}
-      <section
-        id="impact"
-        className="min-h-screen flex flex-col justify-center items-center bg-white text-black px-6 md:px-20"
-      >
-        <h2 className="text-4xl font-bold mb-6">Our Impact</h2>
-        <p className="text-lg md:text-xl max-w-3xl text-center">
-          Through our products and training programs, we have improved the yield and income
-          of hundreds of farmers, contributing to sustainable agriculture in the region.
-        </p>
-      </section>
-
-      {/* CONTACT SECTION */}
-      <section
-        id="contact"
-        className="min-h-screen flex flex-col justify-center items-center bg-gray-50 text-black px-6 md:px-20"
-      >
-        <h2 className="text-4xl font-bold mb-6">Contact Us</h2>
-        <p className="text-lg md:text-xl max-w-3xl text-center mb-4">
-          Have questions or want to book a consultation? Reach out to us!
-        </p>
-        <p className="text-center mb-2">Email: msiskazikani@gmail.com</p>
-        <p className="text-center">Phone: 0882761779</p>
-      </section>
-    </div>
+          {/* MOBILE MENU */}
+          <AnimatePresence>
+            {menuOpen && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.25, ease: "easeOut" }}
+                className="md:hidden overflow-hidden max-h-screen bg-background/95 z-[998] rounded-b-2xl"
+              >
+                <div className="flex flex-col gap-6 px-6 pb-6">
+                  {navigation.map((item) => {
+                    const isActive = active === item.href
+                    return (
+                      <button
+                        key={item.name}
+                        onClick={() => handleScrollTo(item.href)}
+                        className={clsx(
+                          "text-sm font-medium text-left w-full transition-colors",
+                          isActive
+                            ? "text-foreground underline underline-offset-4"
+                            : "text-muted-foreground hover:text-foreground"
+                        )}
+                      >
+                        {item.name}
+                      </button>
+                    )
+                  })}
+                  <Button className="w-full rounded-full">Book Consultation</Button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
+      </div>
+    </motion.header>
   )
 }
