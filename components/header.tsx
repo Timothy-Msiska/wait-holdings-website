@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
 import clsx from "clsx"
 import { Menu, X } from "lucide-react"
@@ -8,8 +8,8 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
 
 const navigation = [
-  { name: "MlimiFert", href: "#mlimifert" },
   { name: "About", href: "#about" },
+  // {name: "mlimifert", href: "#mlimifert" },
   { name: "Services", href: "#services" },
   { name: "Technology", href: "#technology" },
   { name: "Impact", href: "#impact" },
@@ -20,15 +20,24 @@ export function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [active, setActive] = useState("#home")
   const [hovered, setHovered] = useState<string | null>(null)
+  const [showHeader, setShowHeader] = useState(true)
+  const lastScrollY = useRef(0)
+  const headerHeight = 80
 
-  const headerHeight = 80 // Compact height
-
-  // ---------------- Section Observer ----------------
+  // ---------------- Scroll behavior ----------------
   useEffect(() => {
-    const sections = [
-      "home",
-      ...navigation.map((item) => item.href.replace("#", "")),
-    ]
+    const handleScroll = () => {
+      const currentY = window.scrollY
+      setShowHeader(currentY <= lastScrollY.current || currentY < 100)
+      lastScrollY.current = currentY
+    }
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
+
+  // ---------------- Section observer ----------------
+  useEffect(() => {
+    const sections = ["home", ...navigation.map((item) => item.href.replace("#", ""))]
       .map((id) => document.getElementById(id))
       .filter((el): el is HTMLElement => el !== null)
 
@@ -45,21 +54,25 @@ export function Header() {
     return () => observer.disconnect()
   }, [])
 
-  // ---------------- Scroll to Section ----------------
+  // ---------------- Scroll to section ----------------
   const handleScrollTo = (href: string) => {
     const id = href.replace("#", "")
     const element = document.getElementById(id)
-    if (!element) return
-    const top = element.getBoundingClientRect().top + window.scrollY
-    window.scrollTo({ top: top - headerHeight, behavior: "smooth" })
+    if (!element) {
+      // Retry after DOM is rendered
+      setTimeout(() => handleScrollTo(href), 50)
+      return
+    }
+    const top = element.getBoundingClientRect().top + window.scrollY - headerHeight
+    window.scrollTo({ top, behavior: "smooth" })
     setMenuOpen(false)
   }
 
   return (
     <motion.header
-      initial={{ opacity: 0, y: -40 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, ease: "easeOut" }}
+      initial={{ y: -120 }}
+      animate={{ y: showHeader ? 0 : -120 }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
       className="fixed top-6 left-1/2 -translate-x-1/2 z-[999] w-full max-w-6xl"
     >
       <motion.div
@@ -67,14 +80,10 @@ export function Header() {
         className="relative rounded-3xl bg-white/90 backdrop-blur-md border border-transparent shadow-md transition-all"
       >
         <nav className="flex items-center justify-between h-[72px] px-6 md:px-12">
-          {/* LOGO → Far Left */}
-          <a
-            href="#home"
+          {/* LOGO → Far Left, Home Button */}
+          <button
             className="flex items-center flex-shrink-0"
-            onClick={(e) => {
-              e.preventDefault()
-              document.getElementById("home")?.scrollIntoView({ behavior: "smooth" })
-            }}
+            onClick={() => handleScrollTo("#home")}
           >
             <Image
               src="/images/logo.png"
@@ -83,7 +92,7 @@ export function Header() {
               height={60}
               className="h-12 w-auto object-contain"
             />
-          </a>
+          </button>
 
           {/* DESKTOP NAV → Center */}
           <div className="hidden md:flex flex-1 justify-center gap-10">
