@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
 import clsx from "clsx"
-import { Menu } from "lucide-react"
+import { Menu, X } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
 
@@ -31,11 +31,7 @@ export function Header() {
     const onScroll = () => {
       const currentY = window.scrollY
       setScrolled(currentY > 40)
-      if (currentY > lastScrollY.current && currentY > 120) {
-        setShowHeader(false)
-      } else {
-        setShowHeader(true)
-      }
+      setShowHeader(currentY <= lastScrollY.current || currentY < 120)
       lastScrollY.current = currentY
     }
     window.addEventListener("scroll", onScroll)
@@ -45,36 +41,33 @@ export function Header() {
   // ---------------- Active section detection ----------------
   useEffect(() => {
     const sections = [
-      { id: "home" },
-      ...navigation.map((item) => ({ id: item.href.replace("#", "") })),
-    ].map((item) => document.getElementById(item.id))
+      "home",
+      ...navigation.map((item) => item.href.replace("#", "")),
+    ]
+      .map((id) => document.getElementById(id))
       .filter((el): el is HTMLElement => el !== null)
 
     const observer = new IntersectionObserver(
       (entries) => {
-        const visible = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)
-        if (visible.length > 0) {
-          setActive(`#${(visible[0].target as HTMLElement).id}`)
-        }
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActive(`#${entry.target.id}`)
+          }
+        })
       },
-      { rootMargin: `-${headerHeight / 2}px 0px -50% 0px` }
+      { rootMargin: "-50% 0px -50% 0px" }
     )
 
     sections.forEach((section) => observer.observe(section))
     return () => observer.disconnect()
   }, [])
 
-  // ---------------- Scroll to section with offset ----------------
+  // ---------------- Scroll to section ----------------
   const handleScrollTo = (href: string) => {
-    const element = document.querySelector(href)
+    const id = href.replace("#", "")
+    const element = document.getElementById(id)
     if (!element) return
-    const top = element.getBoundingClientRect().top + window.scrollY
-    window.scrollTo({
-      top: top - headerHeight + 2,
-      behavior: "smooth",
-    })
+    element.scrollIntoView({ behavior: "smooth" })
     setMenuOpen(false)
   }
 
@@ -105,7 +98,7 @@ export function Header() {
               className="flex items-center"
               onClick={(e) => {
                 e.preventDefault()
-                window.scrollTo({ top: 0, behavior: "smooth" })
+                document.getElementById("home")?.scrollIntoView({ behavior: "smooth" })
               }}
               animate={{ scale: scrolled ? 0.95 : 1 }}
               transition={{ duration: 0.25 }}
@@ -167,7 +160,7 @@ export function Header() {
                 onClick={() => setMenuOpen((v) => !v)}
                 className="md:hidden ml-auto rounded-xl border border-border p-2"
               >
-                <Menu className="h-5 w-5" />
+                {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
               </button>
             </div>
           </nav>
