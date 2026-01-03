@@ -67,7 +67,8 @@ export function Header() {
     const id = href.replace("#", "")
     const element = document.getElementById(id)
     if (!element) return
-    element.scrollIntoView({ behavior: "smooth" })
+    const top = element.getBoundingClientRect().top + window.scrollY
+    window.scrollTo({ top: top - headerHeight, behavior: "smooth" })
     setMenuOpen(false)
   }
 
@@ -79,7 +80,7 @@ export function Header() {
         paddingTop: scrolled ? 8 : 16,
       }}
       transition={{ duration: 0.25, ease: "easeOut" }}
-      className="fixed top-0 z-50 w-full"
+      className="fixed top-0 z-[999] w-full"
     >
       <div className="mx-auto max-w-7xl px-4">
         <motion.div
@@ -144,10 +145,9 @@ export function Header() {
               })}
             </div>
 
-            {/* CTA + MOBILE MENU */}
+            {/* CTA + MOBILE MENU BUTTON */}
             <div className="flex items-center justify-end gap-2">
-              <Button
-                className="hidden md:inline-flex rounded-full px-6
+              <Button className="hidden md:inline-flex rounded-full px-6
                 bg-gradient-to-r from-primary to-primary/80
                 shadow-md shadow-primary/20
                 hover:shadow-lg hover:shadow-primary/30
@@ -158,7 +158,7 @@ export function Header() {
 
               <button
                 onClick={() => setMenuOpen((v) => !v)}
-                className="md:hidden ml-auto rounded-xl border border-border p-2"
+                className="md:hidden ml-auto rounded-xl border border-border p-2 z-[1000]"
               >
                 {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
               </button>
@@ -173,7 +173,7 @@ export function Header() {
                 animate={{ height: "auto", opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }}
                 transition={{ duration: 0.25, ease: "easeOut" }}
-                className="md:hidden overflow-hidden"
+                className="md:hidden overflow-hidden max-h-screen bg-background/95 z-[998] rounded-b-2xl"
               >
                 <div className="flex flex-col gap-6 px-6 pb-6">
                   {navigation.map((item) => {
