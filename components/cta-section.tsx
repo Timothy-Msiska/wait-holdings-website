@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { ArrowRight, Phone, Mail, MapPin } from "lucide-react"
 import { motion } from "framer-motion"
+import { useState } from "react"
 
 export function CTASection() {
   const features = [
@@ -28,6 +29,29 @@ export function CTASection() {
         "ISO-certified processes ensuring consistent product quality and performance",
     },
   ]
+
+  const [formData, setFormData] = useState({ name: "", email: "", message: "" })
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value })
+  }
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
+    // Generate dynamic mailto with user info
+    const mailToLink = `mailto:info@waitholdingsltd.com?subject=${encodeURIComponent(
+      `Message from ${formData.name || "Someone"}`
+    )}&body=${encodeURIComponent(
+      `Name: ${formData.name || ""}\nEmail: ${formData.email || ""}\n\nMessage:\n${formData.message || ""}`
+    )}`
+
+    // Open default email client
+    window.location.href = mailToLink
+
+    // Reset the form after submission
+    setFormData({ name: "", email: "", message: "" })
+  }
 
   return (
     <section id="contact" className="py-20 bg-muted/10">
@@ -99,42 +123,36 @@ export function CTASection() {
                       </>
                     }
                   />
-                  <ContactItem
-                    icon={Phone}
-                    title="Phone"
-                    subtitle="+265 997 906 959"
-                  />
-                  <ContactItem
-                    icon={Mail}
-                    title="Email"
-                    subtitle={
-                      <a
-                        href="mailto:info@waitholdingsltd.com"
-                        className="text-primary underline"
-                      >
-                        info@waitholdingsltd.com
-                      </a>
-                    }
-                  />
+                  <ContactItem icon={Phone} title="Phone" subtitle="+265 997 906 959" />
+                  <ContactItem icon={Mail} title="Email" subtitle="info@waitholdingsltd.com" />
                 </div>
 
                 {/* Contact Form */}
                 <div className="mt-8 pt-8 border-t border-border">
                   <h4 className="font-semibold mb-4 text-lg">Request a Consultation</h4>
-                  <form className="space-y-4">
+                  <form className="space-y-4" onSubmit={handleSubmit}>
                     <input
                       type="text"
+                      name="name"
                       placeholder="Your Name"
+                      value={formData.name}
+                      onChange={handleChange}
                       className="w-full px-4 py-3 rounded-lg border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
                     />
                     <input
                       type="email"
+                      name="email"
                       placeholder="Your Email"
+                      value={formData.email}
+                      onChange={handleChange}
                       className="w-full px-4 py-3 rounded-lg border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
                     />
                     <textarea
+                      name="message"
                       placeholder="Your Message"
                       rows={4}
+                      value={formData.message}
+                      onChange={handleChange}
                       className="w-full px-4 py-3 rounded-lg border border-input bg-background text-sm resize-none focus:outline-none focus:ring-2 focus:ring-primary/50"
                     />
                     <Button
