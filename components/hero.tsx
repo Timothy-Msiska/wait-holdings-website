@@ -1,9 +1,9 @@
 "use client"
 
+import { useEffect, useState } from "react"
+import { motion, AnimatePresence, Variants } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
-import { motion, AnimatePresence, Variants } from "framer-motion"
-import { useState, useEffect } from "react"
 
 export function Hero() {
   const heroSlides = [
@@ -11,7 +11,8 @@ export function Hero() {
       image: "/images/background.png",
       heading: (
         <>
-          Innovating Agriculture Through <span className="text-primary">Science</span>
+          Innovating Agriculture Through{" "}
+          <span className="text-primary">Science</span>
         </>
       ),
       paragraphs: [
@@ -20,10 +21,11 @@ export function Hero() {
       cta: "Explore Our Services",
     },
     {
-      image: "/images/mlini1.png",
+      image: "/images/bg2-2.png",
       heading: (
         <>
-          Boosting Crop Yields with <span className="text-primary">Mlimifert</span>
+          Boosting Crop Yields with{" "}
+          <span className="text-primary">Mlimifert</span>
         </>
       ),
       paragraphs: [
@@ -42,32 +44,53 @@ export function Hero() {
       setDirection(1)
       setCurrentSlide((prev) => (prev + 1) % heroSlides.length)
     }, 5000)
-    return () => clearInterval(interval)
-  }, [])
 
-  // Smooth slide for images
+    return () => clearInterval(interval)
+  }, [heroSlides.length])
+
+  /* ---------------- Animations ---------------- */
+
   const slideVariants: Variants = {
-    enter: (direction: number) => ({ x: direction > 0 ? "100%" : "-100%", opacity: 0 }),
-    center: { x: 0, opacity: 1 },
-    exit: (direction: number) => ({ x: direction < 0 ? "100%" : "-100%", opacity: 0 }),
+    enter: (direction: number) => ({
+      x: direction > 0 ? "100%" : "-100%",
+      opacity: 0,
+    }),
+    center: {
+      x: 0,
+      opacity: 1,
+    },
+    exit: (direction: number) => ({
+      x: direction < 0 ? "100%" : "-100%",
+      opacity: 0,
+    }),
   }
 
-  // Smooth text fade + slide
   const textVariants: Variants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeInOut" } },
+    hidden: { opacity: 0, y: 16 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.4,
+        ease: "easeOut",
+      },
+    },
   }
 
   const containerVariants: Variants = {
     hidden: {},
-    visible: { transition: { staggerChildren: 0.2 } },
+    visible: {
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
   }
 
   const slide = heroSlides[currentSlide]
 
   return (
-    <section className="relative overflow-hidden pt-[96px] sm:pt-[112px] min-h-[calc(130vh-96px)] flex items-center">
-      {/* Background Image */}
+    <section className="relative min-h-[calc(130vh-96px)] pt-[96px] sm:pt-[112px] flex items-center overflow-hidden">
+      {/* Background */}
       <div className="absolute inset-0 -z-10">
         <AnimatePresence initial={false} custom={direction} mode="popLayout">
           <motion.img
@@ -80,7 +103,11 @@ export function Hero() {
             initial="enter"
             animate="center"
             exit="exit"
-            transition={{ type: "tween", ease: "easeInOut", duration: 1 }}
+            transition={{
+              type: "tween",
+              ease: "easeInOut",
+              duration: 0.5,
+            }}
           />
         </AnimatePresence>
         <div className="absolute inset-0 bg-black/50" />
@@ -96,7 +123,11 @@ export function Hero() {
             initial="enter"
             animate="center"
             exit="exit"
-            transition={{ type: "tween", ease: "easeInOut", duration: 1 }}
+            transition={{
+              type: "tween",
+              ease: "easeInOut",
+              duration: 0.5,
+            }}
           >
             <motion.div
               className="max-w-3xl text-white"
@@ -113,21 +144,27 @@ export function Hero() {
               </motion.h1>
 
               {/* Paragraphs */}
-              {slide.paragraphs.map((p, i) => (
+              {slide.paragraphs.map((text, i) => (
                 <motion.p
                   key={i}
-                  className={`mb-6 max-w-2xl text-lg text-gray-200 sm:text-xl ${i === slide.paragraphs.length - 1 ? "mb-8" : ""}`}
+                  className={`mb-6 max-w-2xl text-lg text-gray-200 sm:text-xl ${
+                    i === slide.paragraphs.length - 1 ? "mb-8" : ""
+                  }`}
                   variants={textVariants}
                 >
-                  {p}
+                  {text}
                 </motion.p>
               ))}
 
               {/* Buttons */}
-              <motion.div className="flex flex-col gap-4 sm:flex-row" variants={textVariants}>
+              <motion.div
+                className="flex flex-col gap-4 sm:flex-row"
+                variants={textVariants}
+              >
                 <motion.div whileHover={{ scale: 1.05 }}>
-                  <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90">
-                    {slide.cta} <ArrowRight className="ml-2 h-4 w-4" />
+                  <Button size="lg" className="bg-primary hover:bg-primary/90">
+                    {slide.cta}
+                    <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 </motion.div>
 
@@ -143,7 +180,10 @@ export function Hero() {
               </motion.div>
 
               {/* Stats */}
-              <motion.div className="mt-20 grid grid-cols-2 gap-8 md:grid-cols-4" variants={containerVariants}>
+              <motion.div
+                className="mt-20 grid grid-cols-2 gap-8 md:grid-cols-4"
+                variants={containerVariants}
+              >
                 {[
                   { value: "15+", label: "Years of Excellence" },
                   { value: "500+", label: "Farmers Served" },
@@ -151,7 +191,9 @@ export function Hero() {
                   { value: "ISO", label: "Certified Quality" },
                 ].map((stat, i) => (
                   <motion.div key={i} variants={textVariants}>
-                    <div className="mb-2 text-4xl font-bold text-primary">{stat.value}</div>
+                    <div className="mb-2 text-4xl font-bold text-primary">
+                      {stat.value}
+                    </div>
                     <div className="text-sm text-gray-300">{stat.label}</div>
                   </motion.div>
                 ))}
