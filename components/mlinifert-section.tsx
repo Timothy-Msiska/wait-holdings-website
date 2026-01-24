@@ -13,9 +13,21 @@ import {
 
 export function MlimifertSection() {
   return (
-    <>
+    <div className="relative overflow-hidden">
+      {/* ===== WATERMARK LOGO ===== */}
+      <div className="pointer-events-none fixed inset-0 z-0 flex items-center justify-center">
+        <Image
+          src="/images/logo-mlimi.png"
+          alt="MlimiFert Watermark"
+          width={520}
+          height={520}
+          className="opacity-[0.04]"
+          priority
+        />
+      </div>
+
       {/* ===== BRAND OVERVIEW ===== */}
-      <section className="py-28 bg-[#f7fcfd]">
+      <section className="relative z-10 py-28 bg-[#f7fcfd]">
         <div className="container mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
@@ -25,7 +37,7 @@ export function MlimifertSection() {
             className="max-w-4xl mx-auto text-center"
           >
             <h2 className="text-4xl font-bold text-[#0c0c0c]">
-               Mlimi<span className="text-green-900">Fert</span> – Fertilizer Built for Malawi
+              Mlimi<span className="text-green-900">Fert</span> – Fertilizer Built for Malawi
             </h2>
 
             <p className="mt-6 text-lg text-gray-600 leading-relaxed">
@@ -40,17 +52,17 @@ export function MlimifertSection() {
             <motion.div
               initial={{ opacity: 0, x: -32 }}
               whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, ease: [0, 0, 0.2, 1] }}
+              transition={{ duration: 0.6 }}
               viewport={{ once: true }}
               className="flex justify-center"
             >
-              <div className="relative w-[260px] h-[260px] bg-white rounded-2xl shadow-lg">
+              <div className="relative w-[300px] h-[300px] rounded-2xl bg-white shadow-lg">
                 <Image
                   src="/images/tobacco-plants-field.jpg"
-                  alt="MlimiFert Urea 46%N"
+                  alt="MlimiFert Product"
                   fill
-                  priority
                   className="object-contain"
+                  priority
                 />
               </div>
             </motion.div>
@@ -58,7 +70,7 @@ export function MlimifertSection() {
             <motion.div
               initial={{ opacity: 0, x: 32 }}
               whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, ease: [0, 0, 0.2, 1] }}
+              transition={{ duration: 0.6 }}
               viewport={{ once: true }}
             >
               <h3 className="text-3xl font-bold text-[#0c0c0c]">
@@ -76,7 +88,7 @@ export function MlimifertSection() {
                     key={item}
                     initial={{ opacity: 0, x: 16 }}
                     whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.4, delay: index * 0.05 }}
+                    transition={{ delay: index * 0.05 }}
                     viewport={{ once: true }}
                     className="flex items-start gap-3"
                   >
@@ -95,20 +107,16 @@ export function MlimifertSection() {
                 key={item.title}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.45, delay: index * 0.06 }}
+                transition={{ delay: index * 0.06 }}
                 viewport={{ once: true }}
                 whileHover={{ y: -6 }}
-                className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow"
+                className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md"
               >
                 <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-5">
                   <item.icon className="w-6 h-6 text-primary" />
                 </div>
-                <h4 className="text-lg font-semibold mb-2">
-                  {item.title}
-                </h4>
-                <p className="text-gray-600 text-sm">
-                  {item.description}
-                </p>
+                <h4 className="text-lg font-semibold mb-2">{item.title}</h4>
+                <p className="text-gray-600 text-sm">{item.description}</p>
               </motion.div>
             ))}
           </div>
@@ -116,20 +124,20 @@ export function MlimifertSection() {
       </section>
 
       {/* ===== NPK BLENDS ===== */}
-      <section className="py-28 bg-white">
+      <section className="relative z-10 py-28 bg-white">
         <div className="container mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, ease: [0, 0, 0.2, 1] }}
+            transition={{ duration: 0.5 }}
             viewport={{ once: true }}
             className="max-w-3xl mx-auto text-center"
           >
-            <h3 className="text-3xl font-bold text-[#0c0c0c]">
+            <h3 className="text-3xl font-bold">
               Tailor-Made NPK Blends Under{" "}
               <span className="text-primary">MlimiFert</span>
             </h3>
-            <p className="mt-6 text-gray-600 leading-relaxed">
+            <p className="mt-6 text-gray-600">
               Crop-specific and soil-test-based fertilizer formulations engineered
               for precision nutrition and consistent results.
             </p>
@@ -141,26 +149,22 @@ export function MlimifertSection() {
                 key={item.title}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.45, delay: index * 0.07 }}
+                transition={{ delay: index * 0.07 }}
                 viewport={{ once: true }}
                 whileHover={{ y: -6 }}
-                className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow"
+                className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md"
               >
                 <div className="w-11 h-11 rounded-full bg-primary/10 flex items-center justify-center mb-4">
                   <item.icon className="w-5 h-5 text-primary" />
                 </div>
-                <h4 className="text-lg font-semibold mb-2">
-                  {item.title}
-                </h4>
-                <p className="text-gray-600 text-sm">
-                  {item.description}
-                </p>
+                <h4 className="text-lg font-semibold mb-2">{item.title}</h4>
+                <p className="text-gray-600 text-sm">{item.description}</p>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
-    </>
+    </div>
   )
 }
 
