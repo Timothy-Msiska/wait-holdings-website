@@ -7,19 +7,19 @@ import { ArrowRight } from "lucide-react"
 
 export function Hero() {
   const heroSlides = [
-    // {
-    //   image: "/images/background.png",
-    //   heading: (
-    //     <>
-    //       Innovating Agriculture Through{" "}
-    //       <span className="text-primary">Science</span>
-    //     </>
-    //   ),
-    //   paragraphs: [
-    //     "WAIT Holdings Limited delivers precision fertilizer manufacturing, advanced soil testing, and laboratory services that empower Malawi’s agricultural sector with science-backed solutions."
-    //   ],
-    //   cta: "Explore Our Services",
-    // },
+    {
+      image: "/images/background.png",
+      heading: (
+        <>
+          Innovating Agriculture Through{" "}
+          <span className="text-primary">Science</span>
+        </>
+      ),
+      paragraphs: [
+        "WAIT Holdings Limited delivers precision fertilizer manufacturing, advanced soil testing, and laboratory services that empower Malawi’s agricultural sector with science-backed solutions."
+      ],
+      cta: "Explore Our Services",
+    },
     {
       image: "/images/bg2-2.png",
       heading: (
