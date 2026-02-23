@@ -13,26 +13,35 @@ import {
 
 export function MlimifertSection() {
   return (
-    <div className="relative overflow-hidden">
-      {/* ===== WATERMARK LOGO ===== */}
-      <div className="pointer-events-none fixed inset-0 z-0 flex items-center justify-center">
-        <Image
-          src="/images/logo-mlimi.png"
-          alt="MlimiFert Watermark"
-          width={520}
-          height={520}
-          className="opacity-[0.04]"
-          priority
-        />
-      </div>
+    <>
+      {/* ================= BRAND OVERVIEW ================= */}
+      <section className="relative py-28 bg-[#f7fcfd] overflow-hidden">
+        {/* WATERMARK */}
+        <motion.div
+          className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center"
+          animate={{ rotate: 360 }}
+          transition={{
+            duration: 80,
+            ease: "linear",
+            repeat: Infinity,
+          }}
+        >
+          <Image
+            src="/images/logo-mlimi.png"
+            alt="MlimiFert Watermark"
+            width={700}
+            height={700}
+            className="opacity-10 select-none"
+            priority
+          />
+        </motion.div>
 
-      {/* ===== BRAND OVERVIEW ===== */}
-      <section className="relative z-10 py-28 bg-[#f7fcfd]">
-        <div className="container mx-auto px-6">
+        {/* CONTENT */}
+        <div className="relative z-10 container mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, ease: [0, 0, 0.2, 1] }}
+            transition={{ duration: 0.5 }}
             viewport={{ once: true }}
             className="max-w-4xl mx-auto text-center"
           >
@@ -47,7 +56,7 @@ export function MlimifertSection() {
             </p>
           </motion.div>
 
-          {/* ===== PRODUCT SECTION ===== */}
+          {/* PRODUCT */}
           <div className="mt-24 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <motion.div
               initial={{ opacity: 0, x: -32 }}
@@ -56,7 +65,7 @@ export function MlimifertSection() {
               viewport={{ once: true }}
               className="flex justify-center"
             >
-              <div className="relative w-[300px] h-[300px] rounded-2xl bg-white shadow-lg">
+              <div className="relative w-[320px] h-[320px] bg-white rounded-2xl shadow-lg">
                 <Image
                   src="/images/tobacco-plants-field.jpg"
                   alt="MlimiFert Product"
@@ -100,7 +109,7 @@ export function MlimifertSection() {
             </motion.div>
           </div>
 
-          {/* ===== CORE VALUES ===== */}
+          {/* CORE VALUES */}
           <div className="mt-28 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {coreValues.map((item, index) => (
               <motion.div
@@ -123,9 +132,29 @@ export function MlimifertSection() {
         </div>
       </section>
 
-      {/* ===== NPK BLENDS ===== */}
-      <section className="relative z-10 py-28 bg-white">
-        <div className="container mx-auto px-6">
+      {/* ================= NPK BLENDS ================= */}
+      <section className="relative py-28 bg-white overflow-hidden">
+        {/* WATERMARK */}
+        <motion.div
+          className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center"
+          animate={{ rotate: -360 }}
+          transition={{
+            duration: 90,
+            ease: "linear",
+            repeat: Infinity,
+          }}
+        >
+          <Image
+            src="/images/logo-mlimi.png"
+            alt="MlimiFert Watermark"
+            width={650}
+            height={650}
+            className="opacity-[0.06] select-none"
+          />
+        </motion.div>
+
+        {/* CONTENT */}
+        <div className="relative z-10 container mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -164,13 +193,11 @@ export function MlimifertSection() {
           </div>
         </div>
       </section>
-    </div>
+    </>
   )
 }
 
-/* =====================
-   DATA
-===================== */
+/* ================= DATA ================= */
 
 const productBenefits = [
   "Rapid nitrogen availability",
