@@ -110,7 +110,7 @@ export function CTASection() {
 
                 {/* Contact Info */}
                 <div className="space-y-5">
-                            
+
                   {/* LOCATION */}
                   <a
                     href="https://www.google.com/maps/dir/?api=1&destination=Thames+Lunzu+Blantyre+Malawi"
@@ -160,7 +160,7 @@ export function CTASection() {
                 </div>
 
                 {/* Contact Form */}
-                <div className="mt-8 pt-8 border-t border-border">
+                {/* <div className="mt-8 pt-8 border-t border-border">
                   <h4 className="font-semibold mb-4 text-lg">Request a Consultation</h4>
                   <form className="space-y-4" onSubmit={handleSubmit}>
                     <input
@@ -194,7 +194,7 @@ export function CTASection() {
                       Send Message
                     </Button>
                   </form>
-                </div>
+                </div> */}
               </CardContent>
             </Card>
           </motion.div>
