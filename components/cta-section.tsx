@@ -110,21 +110,53 @@ export function CTASection() {
 
                 {/* Contact Info */}
                 <div className="space-y-5">
-                  <ContactItem
-                    icon={MapPin}
-                    title="Our Location"
-                    subtitle={
-                      <>
-                        WAIT Holdings Ltd<br />
-                        Along M1 Road<br />
-                        P.O. Box 245<br />
-                        Lunzu<br />
-                        Blantyre
-                      </>
-                    }
-                  />
-                  <ContactItem icon={Phone} title="Phone" subtitle="+265 997 906 959" />
-                  <ContactItem icon={Mail} title="Email" subtitle="info@waitholdingsltd.com" />
+                            
+                  {/* LOCATION */}
+                  <a
+                    href="https://www.google.com/maps/dir/?api=1&destination=Thames+Lunzu+Blantyre+Malawi"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block cursor-pointer hover:opacity-80 transition"
+                  >
+                    <ContactItem
+                      icon={MapPin}
+                      title="Our Location"
+                      subtitle={
+                        <>
+                          WAIT Holdings Ltd<br />
+                          Along M1 Road<br />
+                          P.O. Box 245<br />
+                          Lunzu<br />
+                          Blantyre
+                        </>
+                      }
+                    />
+                  </a>
+                    
+                  {/* PHONE */}
+                  <a
+                    href="tel:+265997906959"
+                    className="block cursor-pointer hover:opacity-80 transition"
+                  >
+                    <ContactItem
+                      icon={Phone}
+                      title="Phone"
+                      subtitle="+265 997 906 959"
+                    />
+                  </a>
+                    
+                  {/* EMAIL */}
+                  <a
+                    href="mailto:info@waitholdingsltd.com"
+                    className="block cursor-pointer hover:opacity-80 transition"
+                  >
+                    <ContactItem
+                      icon={Mail}
+                      title="Email"
+                      subtitle="info@waitholdingsltd.com"
+                    />
+                  </a>
+                    
                 </div>
 
                 {/* Contact Form */}
