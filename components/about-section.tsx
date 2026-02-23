@@ -8,32 +8,32 @@ export function AboutSection() {
     {
       name: "Mr. Saeed Watson Dinyeloh",
       role: "Chairman",
-      photo: "/team/watson.jpeg",
+      photo: "/images/team/watson.jpeg",
     },
     {
       name: "Mr. Martin Anthony Siwu",
       role: "Non-Executive Director",
-      photo: "/team/martin.jpeg",
+      photo: "/images/team/martin.jpeg",
     },
     {
       name: "Ms. Irene Mlundira",
       role: "Managing Director",
-      photo: "/team/irene.jpeg",
+      photo: "/images/team/irene.jpeg",
     },
     {
       name: "Mr. Tafadzwa Mark Madziwa",
       role: "Executive Finance Director",
-      photo: "/team/mark.jpeg",
+      photo: "/images/team/mark.jpeg",
     },
     {
       name: "Mr. Aasim Iqbal Kushkiwala",
       role: "Executive Production Director",
-      photo: "/team/aasim.jpeg",
+      photo: "/images/team/aasim.jpeg",
     },
     {
       name: "Mr. Wellington Yairo",
       role: "Executive Director, Quality Assurance & Supply Chain",
-      photo: "/team/yairo.jpeg",
+      photo: "/images/team/yairo.jpeg",
     },
   ]
 
