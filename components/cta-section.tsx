@@ -89,12 +89,12 @@ export function CTASection() {
               ))}
             </div>
 
-            <Button
+            {/* <Button
               size="lg"
               className="bg-primary text-primary-foreground hover:bg-primary/90 flex items-center gap-2"
             >
               Partner With Us <ArrowRight className="h-4 w-4" />
-            </Button>
+            </Button> */}
           </motion.div>
 
           {/* Right: Contact Card */}
