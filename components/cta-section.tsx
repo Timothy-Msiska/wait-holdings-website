@@ -26,7 +26,7 @@ export function CTASection() {
     {
       title: "Quality Assurance",
       description:
-        "ISO-certified processes ensuring consistent product quality and performance",
+        "MBS-certified processes ensuring consistent product quality and performance",
     },
   ]
 
