@@ -83,11 +83,11 @@ export function MlimifertSection() {
               viewport={{ once: true }}
             >
               <h3 className="text-3xl font-bold text-[#0c0c0c]">
-                Urea 46%N – High Nitrogen Fertilizer
+                NPK 23:10-6S+12n – High Nitrogen Fertilizer
               </h3>
 
               <p className="mt-6 text-gray-600 leading-relaxed">
-                Designed for fast nitrogen availability, MlimiFert Urea 46%N supports
+                Designed for fast nitrogen availability, MlimiFert NPK 23:10-6S+12n supports
                 vigorous growth, improved photosynthesis, and higher yields.
               </p>
 
