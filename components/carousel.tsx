@@ -11,6 +11,7 @@ export function Carousel() {
     "/images/blend/tea-blend.png",
     "/images/blend/NPK.jpeg",
     "/images/blend/tobacco-blend.png",
+    "/images/blend/can-blend.png",
   ];
 
   const [isHovered, setIsHovered] = useState(false);
