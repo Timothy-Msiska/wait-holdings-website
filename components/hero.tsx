@@ -22,7 +22,7 @@ export function Hero() {
       cta: "Explore Our Services",
     },
     {
-      image: "/images/i-mage.png",
+      image: "/images/bg-1-.png",
       heading: (
         <>
           Boosting Crop Yields with{" "}
