@@ -2,6 +2,7 @@
 
 import { Hero } from "@/components/hero"
 import { MlimifertSection } from "@/components/mlinifert-section"
+import { Carousel } from "@/components/carousel"
 import { AboutSection } from "@/components/about-section"
 import { ServicesSection } from "@/components/services-section"
 import { TechnologySection } from "@/components/technology-section"
@@ -73,6 +74,7 @@ export default function Page() {
           >
             <Hero />
             <MlimifertSection />
+            <Carousel />
             <AboutSection />
             <ServicesSection />
             <TechnologySection />
