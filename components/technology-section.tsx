@@ -17,7 +17,7 @@ const strengths = [
   },
   {
     title: "Quality Assurance & Laboratory Support",
-    description: "ISO-certified testing facilities with modern analytical instruments.",
+    description: "MBS-certified testing facilities with modern analytical instruments.",
     items: [
       "Accredited laboratory facilities",
       "Expert analytical team",
