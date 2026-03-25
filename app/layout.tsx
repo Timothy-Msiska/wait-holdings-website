@@ -13,7 +13,10 @@ export const metadata: Metadata = {
   title: "WAIT Holdings Limited | Agricultural Innovation & Laboratory Services",
   description:
     "Leading fertilizer manufacturing, blending services, and agricultural laboratory solutions in Malawi. Providing tailor-made NPK formulations and soil testing services.",
-  generator: "v0.app",
+  generator: "Timothy Msiska",
+  verification: {
+    google: "qY-o86tW3I5s1yLTXJgT0gQYB8e1wv7yv1GwiJpp09U"
+  },
   icons: {
     icon: [
       {
